@@ -674,7 +674,7 @@ async function getCustomerMembershipStatus(customerID) {
     ];
 
     result = await bookingCollection.aggregate(query).toArray();
-    console.log(result[0]["membership"]);
+    console.log("membership result", result[0]["membership"]);
     return result[0]["membership"];
   } catch (err) {
     console.log(err);
@@ -687,26 +687,75 @@ async function getCustomerMembershipStatus(customerID) {
 async function getCustomerBookingHistory(customerID) {
   console.log("get customer booking history", customerID);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    SELECT * 
-    FROM Booking, Car, Rental_Branch, Car_Make 
-    WHERE customerID = @customerID AND Booking.carID = Car.carID AND pickupRentalBranchID = Rental_Branch.rentalBranchID AND Car.makeID = Car_Make.makeID
-    `);
-
-  const params = {
-    "@customerID": customerID,
-  };
+  let client;
+  let result;
 
   try {
-    return await stmt.all(params);
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const bookingCollection = db.collection("booking");
+
+    const query = [
+      {
+        $lookup: {
+          from: "customer",
+          localField: "customer",
+          foreignField: "_id",
+          as: "customer",
+        },
+      },
+      {
+        $match: {
+          "customer.0._id": ObjectId(customerID),
+        },
+      },
+      {
+        $lookup: {
+          from: "rentalBranch",
+          localField: "pickupRentalBranch",
+          foreignField: "_id",
+          as: "pickupRentalBranch",
+        },
+      },
+      {
+        $lookup: {
+          from: "rentalBranch",
+          localField: "returnRentalBranch",
+          foreignField: "_id",
+          as: "returnRentalBranch",
+        },
+      },
+      {
+        $lookup: {
+          from: "car",
+          localField: "car",
+          foreignField: "_id",
+          as: "car",
+        },
+      },
+      {
+        $lookup: {
+          from: "carMake",
+          localField: "car.0.make",
+          foreignField: "_id",
+          as: "car",
+        },
+      },
+    ];
+    result = await bookingCollection.aggregate(query).toArray();
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 

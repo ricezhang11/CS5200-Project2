@@ -24,23 +24,23 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Start Date</th>
             <th scope="col">End Date</th>
             <th scope="col">Transaction amount</th>
             <th scope="col">Car make</th>
             <th scope="col">Pick up branch</th>
+            <th scope="col">Return branch</th>
           </tr>
         </thead>
         <tbody>
            <% for (let booking of bookings) { %>
               <tr>
-                <th scope="row"><%= booking.bookingID %></th>
                 <td><%= booking.bookingStartDate %></td>
                 <td><%= booking.bookingEndDate %></td>
                 <td>$<%= booking.totalCharge %></td>
-                <td><%= booking.make %></td>
-                <td><%= booking.branchName %></td>
+                <td><%= booking.car[0].make %></td>
+                <td><%= booking.pickupRentalBranch[0].branchName %></td>
+                <td><%= booking.returnRentalBranch[0].branchName %></td>
               </tr>
            <% } %>
         </tbody>
