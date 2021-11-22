@@ -1,0 +1,117 @@
+<h2>Add a new car to fleet</h2>
+<form action="/createCar" method="POST">
+  <div>
+    <label class="form-label">
+      Service start year:
+      <input class="form-control" type="text" name="startYear" />
+    </label>
+  </div>
+
+  <div>
+    <label class="form-label">
+      Current mileage:
+      <input class="form-control" type="text" name="mileage" />
+    </label>
+  </div>
+
+  <div>
+    <label class="form-label">
+      Car make:
+    </label>
+    <select name="makeID" id="carMake">
+      <option value="1">GMC</option>
+      <option value="2">Jeep</option>
+      <option value="3">Dodge</option>
+      <option value="4">BMW</option>
+      <option value="5">Audi</option>
+      <option value="6">Toyota</option>
+      <option value="7">Porsche</option>
+      <option value="8">Plymouth</option>
+      <option value="9">Lamborghini</option>
+      <option value="10">Volkswagen</option>
+      <option value="11">Tesla</option>
+      <option value="12">Chevrolet</option>
+      <option value="13">Mazda</option>
+      <option value="14">Saturn</option>
+      <option value="15">Plymouth</option>
+      <option value="16">Honda</option>
+      <option value="17">Mercedes-Benz</option>
+      <option value="18">Buick</option>
+      <option value="19">Suzuki</option>
+      <option value="20">Hyundai</option>
+    </select>
+  </div>
+
+  <div>
+      <label class="form-label">
+        Car model:
+      </label>
+      <select name="modelID" id="carModel">
+        <option value="1">Aspen</option>
+        <option value="2">Forester</option>
+        <option value="3">Legacy</option>
+        <option value="4">CRV</option>
+        <option value="5">Santa Fe</option>
+        <option value="6">Chariot</option>
+        <option value="7">Spyder</option>
+        <option value="8">A3</option>
+        <option value="9">Grand Marquis</option>
+        <option value="10">Silverado</option>
+        <option value="11">Legend</option>
+        <option value="12">Ram</option>
+        <option value="13">Titan</option>
+        <option value="14">Sequoia</option>
+        <option value="15">Cooper</option>
+        <option value="16">Fiorano</option>
+        <option value="17">Club Coupe</option>
+        <option value="18">Elantra</option>
+        <option value="19">Rio5</option>
+        <option value="20">GTI</option>
+      </select>
+  </div>
+
+  <div>
+      <label class="form-label">
+        Car category:
+      </label>
+      <select name="carCategoryID" id="carCategory">
+        <option value="1">Crossover</option>
+        <option value="2">SUV</option>
+        <option value="3">Multi-purpose</option>
+        <option value="4">Convertible</option>
+        <option value="5">Hatchback</option>
+        <option value="6">Sedan</option>
+        <option value="7">Minivan</option>
+      </select>
+  </div>
+
+  <div>
+      <label class="form-label">
+        Current rental branch:
+      </label>
+      <select name="currentRentalBranchID" id="rentalBranch">
+        <option value="1">Vagram, New Brunswick, New Jersey</option>
+        <option value="2">Bamity, Pocatello, Idaho</option>
+        <option value="3">Cookley, Hartford, Connecticut</option>
+        <option value="4">Overhold, Boise, Idaho</option>
+        <option value="5">Stringtough, Fort Lauderdale, Florida</option>
+        <option value="6">Y-Solowarm, Saint Louis, Missouri</option>
+        <option value="7">Redhold, Chicago, Illinois</option>
+        <option value="8">Hatity, San Rafael, California</option>
+        <option value="9">Mat Lam Tam, Boston, Massachusetts</option>
+        <option value="10">Latinux, Philadelphia, Pennsylvania</option>
+        <option value="11">Tresom, Dallas, Texas</option>
+        <option value="12">Opela, Fort Wayne, Indiana</option>
+        <option value="13">Job, Fort Wayne, Indiana</option>
+        <option value="14">Zamit, Columbus, Ohio</option>
+        <option value="15">Wrapsafe, Topeka, Kansas</option>
+        <option value="16">Stim, Austin, Texas</option>
+        <option value="17">Asoka, Winston Salem, North Carolina</option>
+        <option value="18">Andalax, Richmond, Virginia</option>
+        <option value="19">Overhold, Oklahoma City, Oklahoma</option>
+        <option value="20">Alphazap, Des Moines, Iowa</option>
+      </select>
+  </div>
+  <br/>
+  <button class="btn btn-primary" type="submit">Create</button>
+</form>

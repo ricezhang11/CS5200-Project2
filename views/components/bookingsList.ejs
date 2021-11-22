@@ -1,0 +1,26 @@
+<div class="row g-3">
+  <% for (let booking of bookings) { %>
+
+    <div class="col-4">
+      <div class="card p-1">
+        <h5 class="card-title">#<%= booking.bookingID%></h5>
+        <div class="card-text">
+          <div>Start Date: <%= booking.bookingStartDate %> </div>
+          <div>End Date: <%= booking.bookingEndDate %> </div>
+          <div>Transaction amount: $<%= booking.totalCharge %></div>
+          <div>Car make: <%= booking.make %></div>
+          <div>Car model: <%= booking.model %></div>
+          <div>Pick up branch: <%= booking.branchName %></div>
+          <div>
+            <a class="btn btn-outline-primary" href="<%= '/bookings/' + booking.bookingID %>">See detail</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <% } %>
+
+ <%- include("./bookingPagination.ejs", { startDate, endDate, model, make, bookings, currentPage, lastPage }) %>
+
+</div>
