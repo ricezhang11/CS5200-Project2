@@ -2,6 +2,7 @@
 const sqlite3 = require("sqlite3");
 const { open } = require("sqlite");
 const { MongoClient } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 async function getBranches(topK) {
   console.log("get Branches");
@@ -577,32 +578,33 @@ async function getBookingByID(bookingID) {
   }
 }
 
-// April
+// April -- DONE!!
 async function getCustomerByID(customerID) {
   console.log("get customer by ID", customerID);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    SELECT *
-    FROM Customer
-    WHERE Customer.customerID = @customerID
-    `);
-
-  const params = {
-    "@customerID": customerID,
-  };
-
+  let client;
+  let result;
   try {
-    let c = await stmt.get(params);
-    console.log(c);
-    return c;
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const customerCollection = db.collection("customer");
+
+    result = await customerCollection
+      .find({ _id: ObjectId(customerID) })
+      .toArray();
+    console.log("result is", result[0]);
+    return result[0];
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 
