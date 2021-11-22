@@ -23,7 +23,7 @@
           <%- include("../components/carsList.ejs", { startYear, model, make, cars, currentPage, lastPage }) %>
         </div>
         <div class="col-4">
-          <%- include("../components/formCreateCar.ejs") %>
+          <%- include("../components/formCreateCar.ejs", { allMakes, allModels, allRentalBranches })%>
         </div>
       </div>
 

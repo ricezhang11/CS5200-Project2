@@ -1209,33 +1209,38 @@ async function deleteCarByID(carID) {
   }
 }
 
-// April
+// April -- DONE!!
 async function createCar(car) {
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`INSERT INTO
-    Car(carCategoryID, modelID, makeID, startYear, mileage, isAvailable, currentRentalBranchID)
-    VALUES (@carCategoryID, @modelID, @makeID, @startYear, @mileage, @isAvailable, @currentRentalBranchID);`);
+  let client;
+  let result;
 
   try {
-    let newCar = await stmt.run({
-      "@carCategoryID": car.carCategoryID,
-      "@modelID": car.modelID,
-      "@makeID": car.makeID,
-      "@startYear": car.startYear,
-      "@mileage": car.mileage,
-      // new cars are default to be available
-      "@isAvailable": "1",
-      "@currentRentalBranchID": car.currentRentalBranchID,
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carCollection = db.collection("car");
+
+    result = await carCollection.insertOne({
+      currentRentalBranch: ObjectId(car.currentRentalBranchID),
+      make: ObjectId(car.makeID),
+      model: ObjectId(car.modelID),
+      startYear: car.startYear,
+      mileage: car.mileage,
+      isAvailable: true,
     });
-    console.log(newCar);
-    return newCar;
+
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 

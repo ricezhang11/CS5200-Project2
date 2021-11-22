@@ -20,7 +20,14 @@ router.get("/cars", async (req, res, next) => {
   try {
     let total = await myDb.getCarCount(startYear, model, make);
     let cars = await myDb.getCars(startYear, model, make, page, pageSize);
+    let allMakes = await myDb.getAllCarMake();
+    let allModels = await myDb.getAllCarModel();
+    let allRentalBranches = await myDb.getAllRentalBranch();
+
     res.render("./pages/index", {
+      allMakes,
+      allModels,
+      allRentalBranches,
       cars,
       startYear,
       model,
