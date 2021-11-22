@@ -316,6 +316,7 @@ async function getCars(startYear, model, make, page, pageSize) {
   }
 }
 
+// April -- DONE!!
 async function getAllCarMake() {
   console.log("get all car makes in database");
   let client;
@@ -343,6 +344,7 @@ async function getAllCarMake() {
   }
 }
 
+// April -- DONE!!
 async function getAllCarModel() {
   console.log("get all car models in database");
   let client;
@@ -370,6 +372,7 @@ async function getAllCarModel() {
   }
 }
 
+// April -- DONE!!
 async function getAllRentalBranch() {
   console.log("get all rental branches in database");
   let client;
@@ -834,7 +837,7 @@ async function getCarCount(startYear, model, make) {
   }
 }
 
-// April
+// April -- DONE!!
 async function getCarByID(carID) {
   console.log("get car by ID", carID);
 
@@ -1051,7 +1054,7 @@ async function getCustomerMembershipStatus(customerID) {
   }
 }
 
-// April
+// April -- DONE!!
 async function getCustomerBookingHistory(customerID) {
   console.log("get customer booking history", customerID);
 
@@ -1127,7 +1130,7 @@ async function getCustomerBookingHistory(customerID) {
   }
 }
 
-// April
+// April -- DONE!!
 async function updateCarByID(carID, car) {
   console.log("update car by id", carID, car);
 
@@ -1174,30 +1177,35 @@ async function updateCarByID(carID, car) {
   }
 }
 
-// April
+// April -- DONE!!
 async function deleteCarByID(carID) {
   console.log("delete car by ID", carID);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    DELETE FROM Car
-    WHERE
-       carID = @carID;
-    `);
-
-  const params = {
-    "@carID": carID,
-  };
+  let client;
+  let result;
 
   try {
-    return await stmt.run(params);
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carCollection = db.collection("car");
+
+    result = await carCollection.deleteOne({
+      _id: ObjectId(carID),
+    });
+    console.log(result);
+    return result;
+    // this is the query body
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 

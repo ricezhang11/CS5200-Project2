@@ -236,7 +236,7 @@ router.get("/cars/:carID/delete", async (req, res, next) => {
     let deletedCar = await myDb.deleteCarByID(carID);
     console.log("delete", deletedCar);
 
-    if (deletedCar && deletedCar.changes === 1) {
+    if (deletedCar) {
       res.redirect("/cars/?msg=Deleted");
     } else {
       res.redirect("/cars/?msg=Error Deleting");
