@@ -316,6 +316,87 @@ async function getCars(startYear, model, make, page, pageSize) {
   }
 }
 
+async function getAllCarMake() {
+  console.log("get all car makes in database");
+  let client;
+  let result;
+
+  try {
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carMakeCollection = db.collection("carMake");
+
+    result = await carMakeCollection.find({}).toArray();
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+}
+
+async function getAllCarModel() {
+  console.log("get all car models in database");
+  let client;
+  let result;
+
+  try {
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carModelCollection = db.collection("carModel");
+
+    result = await carModelCollection.find({}).toArray();
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+}
+
+async function getAllRentalBranch() {
+  console.log("get all rental branches in database");
+  let client;
+  let result;
+
+  try {
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const rentalBranchCollection = db.collection("rentalBranch");
+
+    result = await rentalBranchCollection.find({}).toArray();
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    client.close();
+  }
+}
+
 async function getBookings(startDate, endDate, model, make, page, pageSize) {
   console.log("get bookings", startDate, endDate, model, make);
   const db = await open({
@@ -757,26 +838,59 @@ async function getCarCount(startYear, model, make) {
 async function getCarByID(carID) {
   console.log("get car by ID", carID);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    SELECT * 
-    FROM Car, Car_Model, Car_Make, Car_Category, Rental_Branch
-    WHERE carID = @carID AND Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID AND Car.currentRentalBranchID = Rental_Branch.rentalBranchID
-    `);
-
-  const params = {
-    "@carID": carID,
-  };
+  let client;
+  let result;
 
   try {
-    return await stmt.get(params);
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carCollection = db.collection("car");
+
+    const query = [
+      {
+        $match: {
+          _id: ObjectId(carID),
+        },
+      },
+      {
+        $lookup: {
+          from: "carMake",
+          localField: "make",
+          foreignField: "_id",
+          as: "make",
+        },
+      },
+      {
+        $lookup: {
+          from: "carModel",
+          localField: "model",
+          foreignField: "_id",
+          as: "model",
+        },
+      },
+      {
+        $lookup: {
+          from: "rentalBranch",
+          localField: "currentRentalBranch",
+          foreignField: "_id",
+          as: "currentRentalBranch",
+        },
+      },
+    ];
+    result = await carCollection.aggregate(query).toArray();
+    console.log(result[0]);
+    return result[0];
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 
@@ -1017,41 +1131,46 @@ async function getCustomerBookingHistory(customerID) {
 async function updateCarByID(carID, car) {
   console.log("update car by id", carID, car);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    UPDATE Car
-    SET
-      carCategoryID = @carCategoryID,
-      modelID = @modelID,
-      makeID = @makeID,
-      startYear = @startYear,
-      mileage = @mileage,
-      isAvailable = @isAvailable,
-      currentRentalBranchID = @currentRentalBranchID
-    WHERE
-       carID = @carID;
-    `);
-
-  const params = {
-    "@carID": carID,
-    "@carCategoryID": car.carCategoryID,
-    "@modelID": car.modelID,
-    "@makeID": car.makeID,
-    "@startYear": car.startYear,
-    "@mileage": car.mileage,
-    "@isAvailable": car.isAvailable,
-    "@currentRentalBranchID": car.currentRentalBranchID,
-  };
+  let client;
+  let result;
 
   try {
-    return await stmt.run(params);
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carCollection = db.collection("car");
+
+    let isAvailable = false;
+    if (car.isAvailable === "1") {
+      isAvailable = true;
+    }
+
+    result = await carCollection.updateOne(
+      { _id: ObjectId(carID) },
+      {
+        $set: {
+          isAvailable: isAvailable,
+          currentRentalBranch: ObjectId(car.currentRentalBranchID),
+          model: ObjectId(car.modelID),
+          make: ObjectId(car.makeID),
+          startYear: car.startYear,
+          mileage: car.mileage,
+        },
+      }
+    );
+
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 
@@ -1225,3 +1344,6 @@ module.exports.deleteBranchByID = deleteBranchByID;
 module.exports.getBookings = getBookings;
 module.exports.getBookingCount = getBookingCount;
 module.exports.getBookingByID = getBookingByID;
+module.exports.getAllCarMake = getAllCarMake;
+module.exports.getAllCarModel = getAllCarModel;
+module.exports.getAllRentalBranch = getAllRentalBranch;

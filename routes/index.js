@@ -178,20 +178,30 @@ router.post("/createCar", async (req, res, next) => {
   }
 });
 
+// same route as the next one but this is just displaying the edit page
 router.get("/cars/:carID/edit", async (req, res, next) => {
   const carID = req.params.carID;
 
   const msg = req.query.msg || null;
   try {
     let car = await myDb.getCarByID(carID);
+    let allMakes = await myDb.getAllCarMake();
+    let allModels = await myDb.getAllCarModel();
+    let allRentalBranches = await myDb.getAllRentalBranch();
 
     console.log("edit car", {
       car,
       msg,
+      allModels,
+      allMakes,
+      allRentalBranches,
     });
 
     res.render("./pages/editCar", {
       car,
+      allModels,
+      allMakes,
+      allRentalBranches,
       msg,
     });
   } catch (err) {
@@ -199,6 +209,7 @@ router.get("/cars/:carID/edit", async (req, res, next) => {
   }
 });
 
+// same route as the previous one but this is for posting the changes
 router.post("/cars/:carID/edit", async (req, res, next) => {
   const carID = req.params.carID;
   const car = req.body;
@@ -207,7 +218,8 @@ router.post("/cars/:carID/edit", async (req, res, next) => {
     let updatedCar = await myDb.updateCarByID(carID, car);
     console.log("update", updatedCar);
 
-    if (updatedCar && updatedCar.changes === 1) {
+    // redirect back to cars
+    if (updatedCar) {
       res.redirect("/cars/?msg=Updated");
     } else {
       res.redirect("/cars/?msg=Error Updating");
