@@ -600,6 +600,7 @@ async function getCustomerByID(customerID) {
       .find({ _id: ObjectId(customerID) })
       .toArray();
     console.log("result is", result[0]);
+    // takes the first element because _id should be the unique identifier for each customer
     return result[0];
   } catch (err) {
     console.log(err);
@@ -608,36 +609,77 @@ async function getCustomerByID(customerID) {
   }
 }
 
-// April
+// April -- DONE!!
 async function getCustomerMembershipStatus(customerID) {
   console.log("get customer membership status", customerID);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  const stmt = await db.prepare(`
-    SELECT sum(totalCharge),
-    CASE
-      WHEN sum(totalCharge) > 3000 THEN 'Gold membership'
-      WHEN sum(totalCharge) > 2000 THEN 'Silver membership'
-      WHEN sum(totalCharge) > 1000 THEN 'Bronze membership'
-      ELSE 'None'
-    END AS MembershipAward
-    FROM Booking
-    WHERE Booking.customerID = @customerID
-    `);
-
-  const params = {
-    "@customerID": customerID,
-  };
+  let client;
+  let result;
 
   try {
-    return await stmt.get(params);
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const bookingCollection = db.collection("booking");
+
+    const query = [
+      {
+        $group: {
+          _id: "$customer",
+          total_spending_of_current_customer: {
+            $sum: "$totalCharge",
+          },
+        },
+      },
+      {
+        $match: {
+          _id: ObjectId(customerID),
+        },
+      },
+      {
+        $addFields: {
+          membership: {
+            $switch: {
+              branches: [
+                {
+                  case: {
+                    $gte: ["$total_spending_of_current_customer", 3000],
+                  },
+                  then: "gold membership",
+                },
+                {
+                  case: {
+                    $gte: ["$total_spending_of_current_customer", 2000],
+                  },
+                  then: "silver membership",
+                },
+                {
+                  case: {
+                    $gte: ["$total_spending_of_current_customer", 1000],
+                  },
+                  then: "bronze membership",
+                },
+              ],
+              default: "None",
+            },
+          },
+        },
+      },
+    ];
+
+    result = await bookingCollection.aggregate(query).toArray();
+    console.log(result[0]["membership"]);
+    return result[0]["membership"];
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 
