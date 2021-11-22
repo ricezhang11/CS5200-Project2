@@ -120,71 +120,199 @@ async function getCustomers(times, page, pageSize) {
   }
 }
 
-// April
+// April -- DONE!!
 async function getCars(startYear, model, make, page, pageSize) {
   console.log("get cars", startYear, model, make);
 
-  const db = await open({
-    filename: "./db/Car.db",
-    driver: sqlite3.Database,
-  });
-
-  let stmt = "";
-
-  if (startYear === "" && model === "" && make === "") {
-    stmt = await db.prepare(
-      "SELECT * FROM Car, Car_Model, Car_Make, Car_Category WHERE Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID LIMIT $pageSize OFFSET $offset",
-      {
-        $pageSize: pageSize,
-        $offset: (page - 1) * pageSize,
-      }
-    );
-  } else if (startYear !== "") {
-    stmt = await db.prepare(
-      "SELECT * FROM Car, Car_Model, Car_Make, Car_Category WHERE Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID AND startYear >= $startYear LIMIT $pageSize OFFSET $offset",
-      {
-        $startYear: startYear,
-        $pageSize: pageSize,
-        $offset: (page - 1) * pageSize,
-      }
-    );
-  } else if (model !== "" && make !== "") {
-    stmt = await db.prepare(
-      "SELECT * FROM Car, Car_Model, Car_Make, Car_Category WHERE Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID AND make = $make AND model = $model LIMIT $pageSize OFFSET $offset",
-      {
-        $make: make,
-        $model: model,
-        $pageSize: pageSize,
-        $offset: (page - 1) * pageSize,
-      }
-    );
-  } else if (model === "") {
-    stmt = await db.prepare(
-      "SELECT * FROM Car, Car_Model, Car_Make, Car_Category WHERE Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID AND make = $make LIMIT $pageSize OFFSET $offset",
-      {
-        $make: make,
-        $pageSize: pageSize,
-        $offset: (page - 1) * pageSize,
-      }
-    );
-  } else {
-    stmt = await db.prepare(
-      "SELECT * FROM Car, Car_Model, Car_Make, Car_Category WHERE Car.modelID = Car_Model.modelID AND Car.makeID = Car_Make.makeID AND Car.carCategoryID = Car_Category.categoryID AND model = $model LIMIT $pageSize OFFSET $offset",
-      {
-        $model: model,
-        $pageSize: pageSize,
-        $offset: (page - 1) * pageSize,
-      }
-    );
-  }
+  let client;
+  let result;
 
   try {
-    let cars = await stmt.all();
-    console.log(cars);
-    return cars;
+    const uri = "mongodb://localhost:27017";
+
+    client = new MongoClient(uri);
+
+    await client.connect();
+
+    console.log("Connected to Mongo Server");
+
+    const db = client.db("project2");
+    const carCollection = db.collection("car");
+
+    // if there're no search criteria, return everything
+    if (startYear === "" && model === "" && make === "") {
+      let query = [
+        {
+          $lookup: {
+            from: "carMake",
+            localField: "make",
+            foreignField: "_id",
+            as: "make",
+          },
+        },
+        {
+          $lookup: {
+            from: "carModel",
+            localField: "model",
+            foreignField: "_id",
+            as: "model",
+          },
+        },
+        {
+          $skip: (page - 1) * pageSize,
+        },
+        {
+          $limit: pageSize,
+        },
+      ];
+      result = await carCollection.aggregate(query).toArray();
+      console.log(result);
+      return result;
+      // search by start year only
+    } else if (startYear !== "") {
+      let query = [
+        {
+          $match: {
+            startYear: {
+              $gt: parseInt(startYear),
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "carMake",
+            localField: "make",
+            foreignField: "_id",
+            as: "make",
+          },
+        },
+        {
+          $lookup: {
+            from: "carModel",
+            localField: "model",
+            foreignField: "_id",
+            as: "model",
+          },
+        },
+        {
+          $skip: (page - 1) * pageSize,
+        },
+        {
+          $limit: pageSize,
+        },
+      ];
+      result = await carCollection.aggregate(query).toArray();
+      console.log(result);
+      return result;
+      // search by both car model and car make
+    } else if (model !== "" && make !== "") {
+      let query = [
+        {
+          $lookup: {
+            from: "carMake",
+            localField: "make",
+            foreignField: "_id",
+            as: "make",
+          },
+        },
+        {
+          $lookup: {
+            from: "carModel",
+            localField: "model",
+            foreignField: "_id",
+            as: "model",
+          },
+        },
+        {
+          $match: {
+            "model.0.model": model,
+          },
+        },
+        {
+          $match: {
+            "make.0.make": make,
+          },
+        },
+        {
+          $skip: (page - 1) * pageSize,
+        },
+        {
+          $limit: pageSize,
+        },
+      ];
+      result = await carCollection.aggregate(query).toArray();
+      return result;
+      // search by car make only
+    } else if (model === "") {
+      let query = [
+        {
+          $lookup: {
+            from: "carMake",
+            localField: "make",
+            foreignField: "_id",
+            as: "make",
+          },
+        },
+        {
+          $lookup: {
+            from: "carModel",
+            localField: "model",
+            foreignField: "_id",
+            as: "model",
+          },
+        },
+        {
+          $match: {
+            "make.0.make": make,
+          },
+        },
+        {
+          $skip: (page - 1) * pageSize,
+        },
+        {
+          $limit: pageSize,
+        },
+      ];
+      result = await carCollection.aggregate(query).toArray();
+      return result;
+      // search by car model only
+    } else {
+      let query = [
+        {
+          $lookup: {
+            from: "carMake",
+            localField: "make",
+            foreignField: "_id",
+            as: "make",
+          },
+        },
+        {
+          $lookup: {
+            from: "carModel",
+            localField: "model",
+            foreignField: "_id",
+            as: "model",
+          },
+        },
+        {
+          $match: {
+            "model.0.model": model,
+          },
+        },
+        {
+          $skip: (page - 1) * pageSize,
+        },
+        {
+          $limit: pageSize,
+        },
+      ];
+      result = await carCollection.aggregate(query).toArray();
+      return result;
+    }
+  } catch (err) {
+    console.log(err);
   } finally {
-    await stmt.finalize();
-    db.close();
+    await client.close();
   }
 }
 
