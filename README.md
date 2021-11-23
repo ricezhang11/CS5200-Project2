@@ -50,10 +50,10 @@ query 3
   <img width="683" alt="Screen Shot 2021-11-23 at 2 15 03 PM" src="https://user-images.githubusercontent.com/90733899/143137801-b591aa2a-314e-47b8-81b0-8fea4a103ee8.png">
 
 query 4  
-![](Project_docs/Diagrams/ex4.png)
+![](Project_docs/Diagrams/query4.png)
   
 query 5  
-![](Project_docs/Diagrams/ex5.png)
+![](Project_docs/Diagrams/query5.png)
 
 ## Mongo Collections and sample JSON
 
