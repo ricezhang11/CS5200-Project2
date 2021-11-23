@@ -19,7 +19,7 @@ https://lucid.app/lucidchart/722ed355-65d1-47df-9cc8-3ba5faa57deb/edit?beaconFlo
 ## ERD Diagram
 https://lucid.app/lucidchart/4cc47107-7d20-475b-9944-03504518d9ac/edit?page=0_0&invitationId=inv_9cbd9f0a-f83d-4c95-931b-c6932ece15a2#
 
-![](Project_docs/Diagrams/erd.jpeg)
+![](Project_docs/Diagrams/ERD.png)
 
 ## Business requirement 
 Please see file: Project_docs/businessRequirement.pdf
