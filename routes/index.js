@@ -44,26 +44,17 @@ router.get("/cars", async (req, res, next) => {
 router.get("/bookings", async (req, res, next) => {
   const startDate = req.query.startDate || "";
   const endDate = req.query.endDate || "";
-  const model = req.query.model || "";
-  const make = req.query.make || "";
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 24;
   try {
-    let total = await myDb.getBookingCount(startDate, endDate, model, make);
-    let bookings = await myDb.getBookings(
-      startDate,
-      endDate,
-      model,
-      make,
-      page,
-      pageSize
-    );
+    let total = await myDb.getBookingCount(startDate, endDate);
+    let bookings = await myDb.getBookings(startDate, endDate, page, pageSize);
+    console.log("index.js debug ");
+    console.log(total, startDate, endDate, page, Math.ceil(total / pageSize));
     res.render("./pages/bookingIndex", {
       bookings,
       startDate,
       endDate,
-      model,
-      make,
       currentPage: page,
       lastPage: Math.ceil(total / pageSize),
     });
@@ -72,39 +63,17 @@ router.get("/bookings", async (req, res, next) => {
   }
 });
 
-// booking details
-router.get("/bookings/:bookingID", async (req, res, next) => {
-  const bookingID = req.params.bookingID;
-  try {
-    let booking = await myDb.getBookingByID(bookingID);
-
-    console.log("get booking by id", {
-      booking,
-    });
-
-    res.render("./components/bookingDetail.ejs", {
-      booking,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
 // branches router
 router.get("/branches", async (req, res, next) => {
-  const topK = req.query.topK || "";
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 24;
   const msg = req.query.msg || null;
-  console.log("get branches by topK", {
-    topK,
-  });
+  console.log("get branches");
   try {
-    let total = await myDb.getBranchCount(topK);
-    let branches = await myDb.getBranches(topK);
+    let total = await myDb.getBranchCount();
+    let branches = await myDb.getBranches();
     res.render("./pages/branchesIndex", {
       branches,
-      topK,
       msg,
       currentPage: page,
       lastPage: Math.ceil(total / pageSize),

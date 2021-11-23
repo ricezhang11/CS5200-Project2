@@ -10,9 +10,9 @@
       <br/>
 
       <div class="row">
-           <%- include("../components/bookingSearchBar.ejs", { startDate, endDate, model, make }) %>
+           <%- include("../components/bookingSearchBar.ejs", { startDate, endDate }) %>
           <br/>
-          <%- include("../components/bookingsList.ejs", { startDate, endDate, model, make, bookings, currentPage, lastPage }) %>
+          <%- include("../components/bookingsList.ejs", { bookings, startDate, endDate, currentPage, lastPage }) %>
         </div>
       </div>
 

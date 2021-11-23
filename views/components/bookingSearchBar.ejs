@@ -1,5 +1,5 @@
 <form action="/bookings/">
-  <h5>Search bookings by start date and end date</h5>
+  <h5>Search bookings's start date within the range</h5>
   <div class="input-group">
     <input
       class="form-control"
@@ -8,36 +8,9 @@
       placeholder="Search for bookings that starts after...."
       value="<%= startDate %>"
     />
-    <input
-      class="form-control"
-      type="date"
-      name="endDate"
-      placeholder="Search for bookings that ends before...."
-      value="<%= endDate %>"
-    />
+  
     <button type="submit" class="btn-primary btn">Search</button>
   </div>
 
-  <br/>
-
-  <h5>Search bookings by model and make (case sensitive)</h5>
-  <div class="input-group">
-    <input
-      class="form-control"
-      type="text"
-      name="model"
-      placeholder="Enter a car model"
-      value="<%= model %>"
-    />
-    <input
-      class="form-control"
-      type="text"
-      name="make"
-      placeholder="Enter a car make"
-      value="<%= make %>"
-    />
-
-    <button type="submit" class="btn-primary btn">Search</button>
-  </div>
-  <div> * Please clear previous search criterias before creating a new search</div>
+  
 </form>
