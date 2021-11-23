@@ -120,10 +120,9 @@ CarModel collection:
 }  
 </pre>  
 ## Team contributions
-We splitted our tasks evenly during this assignment. We conducted zoom meetings/online chat/Lucid Chart to put together the business requirement documents, UML and ERD diagrams and BCNF analysis.  
-For creating tables, Bugu wrote the queries and April QA'ed for her.  
-For creating testing data and populating the database, April created the test data online and Bugu performed the population.  
-For creating the 5 SQL queries, April wrote the queries and Bugu QA'ed for her.  
+We splitted our tasks evenly during this assignment. We conducted zoom meetings/online chat/Lucid Chart to put together the business requirement documents, UML and ERD diagrams.  
+For creating testing data and populating the database, April and Bugu discussed and agreed on the data format. April created mock data using Mockaroo and Bugu tried importing the data and QA'ed the data for April.  
+For creating the 5 SQL queries, April wrote and ran query 4 and 5. Bugu wrote and ran query 1, 2 and 3.  
 We set up the Github repo together and both worked on uploading files into the repo as well as the write-up for this README.md file
 
 In terms of project implementation, the work is splitted as below:  
@@ -142,5 +141,5 @@ In terms of project implementation, the work is splitted as below:
    a. Filter cars by service start year  
    b. Filter cars that belong to a certain make and model  
 3. Implemented Customer analysis:  
-   a. calculate customers' membership titles based on their total transaction amount (>$3000 gold membership, >$2000 silver membership, >$1000 bronze membership).  
+   a. calculate customers' membership titles based on their total transaction amount.  
    b. search and display customers that have booked with the company for more than certain times.
