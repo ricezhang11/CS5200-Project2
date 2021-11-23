@@ -7,9 +7,10 @@ We aim to develop a web-based management system for a car rental company. It has
 ## How to run the program
 1. clone the project to your local using git clone.
 2. cd into project directory.
-3. run npm install command to install all necessary packages.
-4. run npm start command.
-5. open your browser and navigate to localhost:3000/ and you should see the "Car Management" page.
+3. populate the MongoDB database using instructions below.
+4. run npm install command to install all necessary packages.
+5. run npm start command.
+6. open your browser and navigate to localhost:3000/ and you should see the "Car Management" page.
 
 ## UML Diagram
 https://lucid.app/lucidchart/722ed355-65d1-47df-9cc8-3ba5faa57deb/edit?beaconFlowId=341BAFE5E164E51C&invitationId=inv_6ba983b6-83d2-4e74-866d-5fbff519bbd8&page=0_0#
@@ -27,13 +28,12 @@ Please see file: Project_docs/businessRequirement.pdf
 ## How to populate the MongoDB database
 1. Please find the file "Project2.zip" file under the project directory.  
 2. Download the zip file into your local (e.g. your desktop) and unzip it.  
-3. Then, assume you've installed the mongod server, mongosh shell and the MongoDB Database Tools in your local, you can start a MongoDB instance in your local by using command $brew services start mongodb-community@5.0 Please refer to the documentation here for running mongod server on macOS system (https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/).  
-4. Once you have the mongod server running, run the command mongorestore -d project2 ~/Desktop/Project2 (change the path to the file as needed). Open your MongoDB Compass application, connect to localhost:27017 and you should see a new database called project2 has been created and there're 6 collections in it (see sample picture below).  
+3. Then, assume you've installed the mongod server, mongosh shell and the MongoDB Database Tools in your local, you can start a MongoDB instance in your local by using command ```brew services start mongodb-community@5.0``` Please refer to the documentation here for running mongod server on macOS system (https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/).  
+4. Once you have the mongod server running, run the command ```mongorestore -d project2 ~/Desktop/project2``` (change the path to the file as needed). Open your MongoDB Compass application, connect to localhost:27017 and you should see a new database called project2 has been created and there're 6 collections in it (see sample picture below).  
 ![](Project_docs/Diagrams/db.png)
 
 
 ## 5 queries we wrote for the database
-Please see the file "project_queries.sql"  
 Screenshots of the run results of these 5 queries  
   
 query 1    
