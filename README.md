@@ -55,76 +55,70 @@ query 4
 query 5  
 ![](Project_docs/Diagrams/ex5.png)
 
-## Database schemas and proof that they are in BCNF:
+## Mongo Collections and sample JSON
 
-Database schemas:
+We’ll have 6 collections -- Car, Customer, Booking, RentalBranch, CarModel, CarMake. We choose to use references to store the relationship between data, like the example JSONs below.
 
-Car(**carID**, *currentRentalBranchID, carCategoryID, modelID, makeID,* startYear, mileage, isAvailable)  
-Customer(**customerID**, firstName, lastName, phoneNumber, email, city, state, country)  
-Booking(**bookingID**, bookingStartDate, bookingEndDate, *carID, customerID,* totalCharge, pickupRentalBranchID, returnRentalBranchID)  
-RentalBranch(**rentalBranchID**, branchName, address, city, state, country, branchManager)  
-Car Category(**categoryID**, categoryType)  
-Car Model(**modelID**, model)  
-Car Make(**makeID**, make)
+JSON examples
 
-Proof that our schemas are in BCNF:
+Car collection:
+{
+    “_id”: ObjectId(“fdasfdsr34rqfdtewf”),
+    “currentRentalBranch”: ObjectId(“123123”),
+    “model”:  ObjectId(“234234”),
+    “make”: ObjectId(“456456”),
+    “startYear”: 2020,
+    “mileage”: 19898，
+    “isAvailable”: true
+}
 
-1.All the schemas are in 1NF because all the attributes in all schemas are single-valued.
-2.To prove the schema is in 2NF and BCNF, list out all the functional dependencies in each schema:
-    
-    Car:
-    carID -> currentRentalBranchID
-    carID -> carCategoryID
-    carID -> modelID
-    carID -> makeID
-    carID -> startYear
-    carID -> mileage
-    carID -> isavailable
-    
-There’s only one primary key in this table. All the attributes in the Car schema are only and fully dependent on the primary key alone. Therefore this schema is in 2NF and BCNF. 
+Customer collection:
+{
+    “_id”: ObjectId(“fdasfdsafdsaf”),
+    “firstName”: “April”,
+    “lastName”: “Zhang”,
+    “phoneNumber”: “8883507088”,
+    “email”: “email@my.com”,
+    “city”: “Sunnyvale”,
+    “state”: “California”,
+    “country”: “USA”
+}
 
-    Customer:
-    customerID -> firstName
-    customerID -> lastName
-    customerID -> phoneNumber
-    customerID -> email
-    customerID -> city
-    customerID -> state
-    customerID -> country
-    
-There’s only one primary key in this table. All the attributes in the Customer schema are only and fully dependent on the primary key alone. Therefore this schema is in 2NF and BCNF.
-    
-    Booking:
-    bookingID -> bookingStartDate
-    bookingID -> bookingEndDate
-    bookingID -> carID
-    bookingID -> customerID
-    bookingID -> totalCharge
-    bookingID -> pickupRentalBranchID
-    bookingID -> returnRentalBranchID
-    
-There’s only one primary key in this table. All the attributes in the Booking schema are only and fully dependent on the primary key alone. Therefore this schema is in 2NF and BCNF.
 
-    RentalBranch:
-    rentalBranchID -> branchName
-    rentalBranchID -> address
-    rentalBranchID -> city
-    rentalBranchID -> state
-    rentalBranchID -> country
-    rentalBranchID -> branchManager
+Booking collection:
+{
+    “_id”: ObjectId(“fdsrewrgfds”),
+    “bookingStartDate”: 2021-08-09T09:55:47.000+00:00,
+    “bookingEndDate”: 2021-09-19T09:55:47.000+00:00,
+    “car”: ObjectId(“432432rdwar”),
+    “customer”: ObjectId(“54f345”),
+    “totalCharge”: 56.78, 
+    “pickupRentalBranch”: ObjectId(“fda324fdsafdsa”),
+    “returnRentalBranch”: ObjectId(“432432fdsafdsfds”)
+}
 
-There’s only one primary key in this table. All the attributes in the RentalBranch schema are only and fully dependent on the primary key alone. Therefore this schema is in 2NF and BCNF.
+RentalBranch collection:
+{
+    "_id"：ObjectId(“123123”),
+    "branchName": “5th Avenue” 
+    "address": “5th Avenue”
+    "city": “San Jose”
+    "state":  “California”
+    "country" : “United States”
+    "branchManager": “Tim Cook”
+}
 
-    Car Category:
-    categoryID -> categoryType
-    
-    Car Model:
-    modelID -> model
+CarMake collection:
+{
+    “_id”：ObjectId(“456456”),
+    “make”：”Honda”,
+}
 
-    Car Make:
-    makeID -> make
-    
-There’s only one primary key in these tables. All the attributes in these three schemas are only and fully dependent on their respective primary key alone. Therefore, these schemas are in 2NF and BCNF. 
+CarModel collection:
+{
+    “_id”: ObjectId(“543543”),
+    “model”: “Elantra”
+}
 
 ## Team contributions
 We splitted our tasks evenly during this assignment. We conducted zoom meetings/online chat/Lucid Chart to put together the business requirement documents, UML and ERD diagrams and BCNF analysis.  
