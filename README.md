@@ -60,66 +60,65 @@ query 5
 We’ll have 6 collections -- Car, Customer, Booking, RentalBranch, CarModel, CarMake. We choose to use references to store the relationship between data, like the example JSONs below.
 
 JSON examples
+<pre>
+Car collection:  
+{  
+    “_id”: ObjectId(“fdasfdsr34rqfdtewf”),  
+    “currentRentalBranch”: ObjectId(“123123”),  
+    “model”:  ObjectId(“234234”),  
+    “make”: ObjectId(“456456”),  
+    “startYear”: 2020,  
+    “mileage”: 19898， 
+    “isAvailable”: true  
+}  
+  
+Customer collection:  
+{  
+    “_id”: ObjectId(“fdasfdsafdsaf”),  
+    “firstName”: “April”,  
+    “lastName”: “Zhang”,  
+    “phoneNumber”: “8883507088”,  
+    “email”: “email@my.com”,  
+    “city”: “Sunnyvale”,  
+    “state”: “California”,  
+    “country”: “USA”  
+}  
+  
+Booking collection:  
+{  
+    “_id”: ObjectId(“fdsrewrgfds”),  
+    “bookingStartDate”: 2021-08-09T09:55:47.000+00:00,  
+    “bookingEndDate”: 2021-09-19T09:55:47.000+00:00,  
+    “car”: ObjectId(“432432rdwar”),  
+    “customer”: ObjectId(“54f345”),  
+    “totalCharge”: 56.78,  
+    “pickupRentalBranch”: ObjectId(“fda324fdsafdsa”),  
+    “returnRentalBranch”: ObjectId(“432432fdsafdsfds”)  
+}  
+  
+RentalBranch collection:  
+{  
+    "_id"：ObjectId(“123123”),  
+    "branchName": “5th Avenue”,  
+    "address": “5th Avenue”,  
+    "city": “San Jose”,  
+    "state":  “California”,  
+    "country" : “United States”,  
+    "branchManager": “Tim Cook”  
+}  
 
-Car collection:
-{
-    “_id”: ObjectId(“fdasfdsr34rqfdtewf”),
-    “currentRentalBranch”: ObjectId(“123123”),
-    “model”:  ObjectId(“234234”),
-    “make”: ObjectId(“456456”),
-    “startYear”: 2020,
-    “mileage”: 19898，
-    “isAvailable”: true
-}
-
-Customer collection:
-{
-    “_id”: ObjectId(“fdasfdsafdsaf”),
-    “firstName”: “April”,
-    “lastName”: “Zhang”,
-    “phoneNumber”: “8883507088”,
-    “email”: “email@my.com”,
-    “city”: “Sunnyvale”,
-    “state”: “California”,
-    “country”: “USA”
-}
-
-
-Booking collection:
-{
-    “_id”: ObjectId(“fdsrewrgfds”),
-    “bookingStartDate”: 2021-08-09T09:55:47.000+00:00,
-    “bookingEndDate”: 2021-09-19T09:55:47.000+00:00,
-    “car”: ObjectId(“432432rdwar”),
-    “customer”: ObjectId(“54f345”),
-    “totalCharge”: 56.78, 
-    “pickupRentalBranch”: ObjectId(“fda324fdsafdsa”),
-    “returnRentalBranch”: ObjectId(“432432fdsafdsfds”)
-}
-
-RentalBranch collection:
-{
-    "_id"：ObjectId(“123123”),
-    "branchName": “5th Avenue” 
-    "address": “5th Avenue”
-    "city": “San Jose”
-    "state":  “California”
-    "country" : “United States”
-    "branchManager": “Tim Cook”
-}
-
-CarMake collection:
-{
-    “_id”：ObjectId(“456456”),
-    “make”：”Honda”,
-}
-
-CarModel collection:
-{
-    “_id”: ObjectId(“543543”),
-    “model”: “Elantra”
-}
-
+CarMake collection:  
+{  
+    “_id”：ObjectId(“456456”),  
+    “make”：”Honda”,  
+}  
+  
+CarModel collection:  
+{  
+    “_id”: ObjectId(“543543”),  
+    “model”: “Elantra”  
+}  
+</pre>  
 ## Team contributions
 We splitted our tasks evenly during this assignment. We conducted zoom meetings/online chat/Lucid Chart to put together the business requirement documents, UML and ERD diagrams and BCNF analysis.  
 For creating tables, Bugu wrote the queries and April QA'ed for her.  
