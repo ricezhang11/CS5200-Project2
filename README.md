@@ -122,7 +122,7 @@ CarModel collection:
 ## Team contributions
 We splitted our tasks evenly during this assignment. We conducted zoom meetings/online chat/Lucid Chart to put together the business requirement documents, UML and ERD diagrams.  
 For creating testing data and populating the database, April and Bugu discussed and agreed on the data format. April created mock data using Mockaroo and Bugu tried importing the data and QA'ed the data for April.  
-For creating the 5 SQL queries, April wrote and ran query 4 and 5. Bugu wrote and ran query 1, 2 and 3.  
+For creating the 5 MongoDB queries, April wrote and ran query 4 and 5. Bugu wrote and ran query 1, 2 and 3.  
 We set up the Github repo together and both worked on uploading files into the repo as well as the write-up for this README.md file
 
 In terms of project implementation, the work is splitted as below:  
