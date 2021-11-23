@@ -34,6 +34,7 @@ Please see file: Project_docs/businessRequirement.pdf
 
 
 ## 5 queries we wrote for the database
+Files for the queries: Project_docs/queries
 Screenshots of the run results of these 5 queries  
   
 query 1    
