@@ -1,63 +1,3 @@
-// Project 2, query 4: Find the oldest car (earliest start year) in the branch with
-// the name “Mat Lam Tam” and turn its availability to False.
-const { MongoClient } = require("mongodb");
-async function Query4() {
-  let client;
-  try {
-    const uri = "mongodb://localhost:27017";
-
-    client = new MongoClient(uri);
-
-    await client.connect();
-
-    console.log("Connected to Mongo Server");
-
-    const db = client.db("project2");
-    const carCollection = db.collection("car");
-    // this is the query body
-    const query = [
-      {
-        $sort: {
-          startYear: 1,
-        },
-      },
-      {
-        $group: {
-          _id: "$currentRentalBranch",
-          car_with_earliest_start_year: {
-            $first: "$$ROOT",
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: "rentalBranch",
-          localField: "_id",
-          foreignField: "_id",
-          as: "branch",
-        },
-      },
-      {
-        $match: {
-          "branch.0.branchName": "Mat Lam Tam",
-        },
-      },
-      {
-        $set: {
-          isAvailable: false,
-        },
-      },
-    ];
-
-    const result = await carCollection.aggregate(query).toArray();
-    console.log("result for Query 4 is: ", result);
-  } finally {
-    await client.close();
-  }
-}
-
-module.exports.Query4 = Query4;
-
 // Project 2, query 5:
 // # advanced query mechanism
 // # Scenario below uses advanced mechanism of $switch:
@@ -65,6 +5,7 @@ module.exports.Query4 = Query4;
 // # Customers who have spent more than $3000 will be awarded gold membership
 // # Customers who have spent more than $2000 will be awarded silver membership
 // # Customers who have spent more than $1000 will be awarded bronze membership
+const { MongoClient } = require("mongodb");
 async function Query5() {
   let client;
   try {
@@ -128,4 +69,4 @@ async function Query5() {
 }
 
 module.exports.Query5 = Query5;
-Query4();
+Query5();
