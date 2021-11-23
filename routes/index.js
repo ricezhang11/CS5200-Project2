@@ -119,10 +119,11 @@ router.get("/branches", async (req, res, next) => {
 // display customers -- all customers or fit certain search queries
 router.get("/customers", async (req, res, next) => {
   const page = +req.query.page || 1;
-  const pageSize = +req.query.pageSize || 200;
+  const pageSize = +req.query.pageSize || 24;
   const times = req.query.times || "";
   try {
     let total = await myDb.getCustomerCount(times);
+    console.log("inside get/customer route", total);
     let customers = await myDb.getCustomers(times, page, pageSize);
     res.render("./pages/customersIndex", {
       customers,
@@ -141,7 +142,8 @@ router.get("/customers/:customerID", async (req, res, next) => {
   try {
     let customer = await myDb.getCustomerByID(customerID);
     let bookings = await myDb.getCustomerBookingHistory(customerID);
-    let membershipStatus = await myDb.getCustomerMembershipStatus(customerID);
+    let membershipStatus =
+      (await myDb.getCustomerMembershipStatus(customerID)) || "None";
 
     console.log("get customer by id", {
       customer,

@@ -644,7 +644,7 @@ async function getCustomerCount(times) {
       let count = result[0]["count"];
       console.log("result is:", result);
       console.log("count is", count);
-      return result;
+      return result[0]["count"];
     }
   } catch (err) {
     console.log(err);
@@ -1020,19 +1020,19 @@ async function getCustomerMembershipStatus(customerID) {
               branches: [
                 {
                   case: {
-                    $gte: ["$total_spending_of_current_customer", 3000],
+                    $gte: ["$total_spending_of_current_customer", 6000],
                   },
                   then: "gold membership",
                 },
                 {
                   case: {
-                    $gte: ["$total_spending_of_current_customer", 2000],
+                    $gte: ["$total_spending_of_current_customer", 4000],
                   },
                   then: "silver membership",
                 },
                 {
                   case: {
-                    $gte: ["$total_spending_of_current_customer", 1000],
+                    $gte: ["$total_spending_of_current_customer", 2000],
                   },
                   then: "bronze membership",
                 },
